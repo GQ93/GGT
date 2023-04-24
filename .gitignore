@@ -5,6 +5,7 @@ venv/
 results/
 notes/
 data/
+paper/
 # ignore files
 *.zip
 *.npy
