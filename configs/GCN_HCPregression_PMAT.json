@@ -1,0 +1,20 @@
+{
+  "model": "GCN",
+  "model_save_suffix": "cnbScoresRegression",
+  "pretrain": false,
+  "pretrain_model_name": "",
+  "net_params": {
+    "L": 3,
+    "input_dim": 268,
+    "hidden_dim": 256,
+    "output_dim": 128,
+    "predict_out": 1,
+    "num_heads": 1,
+    "pos_enc_dim": 32,
+    "readout": "mean",
+    "dropout": 0.1,
+    "task_loss": "L1",
+    "k": 2,
+    "weight_score": [0.1, 0.55, 0.35]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "model": "GGT",
+  "model_save_suffix": "cnbScoresRegression",
+  "pretrain": true,
+  "pretrain_model_name": "pretrained/pnc_wrat/2023_03_23_12_26dglPNC_cnbScoresRegression_GGT_emoid_pnc_wrat.pth",
+  "net_params": {
+    "L": 3,
+    "num_heads": 1,
+    "input_dim": 264,
+    "hidden_dim": 256,
+    "output_dim": 128,
+    "predict_out": 3,
+    "readout": "mean",
+    "dropout": 0,
+    "residual": true,
+    "edge_feat": true,
+    "num_edge_feat": 2,
+    "batch_norm": true,
+    "att_act1" : "tanh",
+    "att_act2" : "tanh",
+    "pos_enc_dim": 32,
+    "pe_init": "rand_walk",
+    "use_lapeig_loss": true,
+    "alpha_loss": 1e-2,
+    "lambda_loss": 100,
+    "task_loss": "L2",
+    "weight_score": [1.0, 0, 0]
+  }
+}

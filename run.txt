@@ -1,0 +1,8 @@
+@echo off
+main_HCP_regression.py --paradigms 'rest_hcp'
+main_HCP_regression.py --paradigms 'social_hcp'
+main_HCP_regression.py --paradigms 'relational_hcp'
+main_HCP_regression.py --paradigms 'moto_hcp'
+main_HCP_regression.py --paradigms 'language_hcp'
+main_HCP_regression.py --paradigms 'gambling_hcp'
+main_HCP_regression.py --paradigms 'wm_hcp'
