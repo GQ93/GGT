@@ -118,7 +118,6 @@ def main(args):
                 'optimizer': optimizer.state_dict()
                          }
 
-                # 'lr_sched': scheduler}
 
         early_stopping(epoch_loss_train,  epoch_loss_val)
         end_time = time.time()

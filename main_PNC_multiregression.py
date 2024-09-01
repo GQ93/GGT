@@ -131,7 +131,6 @@ def main(args):
                 'optimizer': optimizer.state_dict()
                          }
 
-
         early_stopping(epoch_loss_train,  epoch_loss_val)
         if early_stopping.early_stop:
             logger.info("We are at epoch: {}".format(epoch))

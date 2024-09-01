@@ -156,23 +156,6 @@ def main(args):
                  bbox_inches='tight', pad_inches=0.05)
     plt.show()
 
-    # vec = np.asarray(vec, dtype='float64')
-    #
-    # roi_idx = []
-    # c = []
-    #
-    #
-    # for i, info in enumerate(roi_info[1]):
-    #     if info in c_dict:
-    #         roi_idx.append(i)
-    #         c.append(c_dict[info][0])
-    #
-    # pos_embedded = TSNE(n_components=2, init='pca', perplexity=10).fit_transform(vec[roi_idx])
-    # fig, ax = plt.subplots()
-    # # scatter = plt.scatter(x, y, c=values, cmap=colors)
-    # scatter = plt.scatter(pos_embedded[roi_idx, 0], pos_embedded[roi_idx, 1], c=c, cmap=colors)
-    # plt.legend(handles=scatter.legend_elements()[0], labels=labels)
-    # plt.show()
 
 
 if __name__ == '__main__':
