@@ -42,7 +42,7 @@ def main(args):
         config['net_params']['weight_score'] = [0.1, 0.55, 0.35]
 
 
-    save_name = now + config['dataset'] + '_' + config['model_save_suffix'] + '_' + config['model'] + '_' + args.paradigms + '_' + args.cnb_scores
+    save_name = now + config['dataset'] + '_' + config['model_save_suffix'] + '_' + config['model'] + '_' + args.paradigms + '_' + args.cnb_scores + '_' + str(args.sparse);
     if not os.path.exists(abspath('results')):
         os.makedirs(abspath('results'))
     if not os.path.exists(abspath('results/pretrained')):
@@ -84,6 +84,9 @@ def main(args):
     model = load_model(config)
     model.to(device)
     logger.info(model)
+    total_params = sum(p.numel() for p in model.parameters())
+    logger.info(f'Total number of parameters: {total_params}')
+
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.L2)
     if config['pretrain']:
         checkpoint = torch.load(abspath(pj('results', config['pretrain_model_name'])))
@@ -96,9 +99,13 @@ def main(args):
     early_stopping = utils.EarlyStopping(tolerance=20, min_delta=0)
     # train
     for epoch in range(args.max_epochs):
+        start_time = time.time()
         epoch_loss_train, optimizer = PNC_multi_regression.train_epoch(model, optimizer, device, train_loader, epoch,
                                                                            logger, writer=writer,
                                                                            weight_score=config['net_params']['weight_score'])
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        logger.info(f'Elapsed time for running the model: {elapsed_time:.4f} seconds')
         epoch_loss_val, _ = PNC_multi_regression.evaluate_network(model, device, val_loader, epoch, logger, writer=writer,
                                                                   weight_score=config['net_params']['weight_score'])
         epoch_loss_test, _ = PNC_multi_regression.evaluate_network(model, device, test_loader, epoch, logger,
@@ -124,12 +131,7 @@ def main(args):
                 'optimizer': optimizer.state_dict()
                          }
 
-        # if epoch_loss_train < min_test_loss:
-        #     min_test_loss = epoch_loss_train
-        #     checkpoint = {
-        #         'model': model.state_dict(),
-        #         'optimizer': optimizer.state_dict(),
-        #         'lr_sched': scheduler}
+
         early_stopping(epoch_loss_train,  epoch_loss_val)
         if early_stopping.early_stop:
             logger.info("We are at epoch: {}".format(epoch))
@@ -142,7 +144,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PNC multi-regression')
     parser.add_argument('--lr', default=1e-3, help='learning rate')
     parser.add_argument('--batch_size', default=4, type=int, help='batch size')
-    parser.add_argument('--max_epochs', default=3, type=int, help='max number of epochs')
+    parser.add_argument('--max_epochs', default=5, type=int, help='max number of epochs')
     parser.add_argument('--L2', default=1e-6, help='L2 regularization')
     parser.add_argument('--dropout', default=None, help='dropout rate')
     parser.add_argument('--seed', default=100, type=int, help='random seed')

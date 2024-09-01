@@ -12,6 +12,7 @@ paper/
 *.log
 *.mat
 *.m
+*.ipynb
 *Untitled*
 # ignore all zip files in any subdirectory
 **/*.zip

@@ -15,7 +15,7 @@ from train import HCP_regression
 import time
 import torch.optim.lr_scheduler as lr_scheduler
 from torch.utils.tensorboard import SummaryWriter
-
+import time
 
 def main(args):
     now = str(time.strftime("%Y_%m_%d_%H_%M"))
@@ -32,7 +32,7 @@ def main(args):
     if args.dropout:
         config['net_params']['dropout'] = args.dropout
 
-    save_name = now + config['dataset'] + '_' + config['model_save_suffix'] + '_' + config['model'] + '_' + args.paradigms
+    save_name = now + config['dataset'] + '_' + config['model_save_suffix'] + '_' + config['model'] + '_' + args.paradigms + '_' + str(args.sparse);
     if not os.path.exists(abspath('results')):
         os.makedirs(abspath('results'))
     if not os.path.exists(abspath('results/pretrained')):
@@ -75,6 +75,7 @@ def main(args):
     model = load_model(config)
     model.to(device)
     logger.info(model)
+    logger.info('Total number of parameters: {total_params}'.format(total_params=sum(p.numel() for p in model.parameters())))
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.L2)
     if config['pretrain']:
         checkpoint = torch.load(abspath(pj('results', config['pretrain_model_name'])))
@@ -87,9 +88,11 @@ def main(args):
     early_stopping = utils.EarlyStopping(tolerance=20, min_delta=0)
     # train
     for epoch in range(args.max_epochs):
+        start_time = time.time()
         epoch_loss_train, optimizer = HCP_regression.train_epoch(model, optimizer, device, train_loader, epoch,
                                                                        logger, writer=writer,
                                                                        weight_score=config['net_params']['weight_score'])
+
         epoch_loss_val, _ = HCP_regression.evaluate_network(model, device, val_loader, epoch, logger, writer=writer,
                                                                   weight_score=config['net_params']['weight_score'])
         epoch_loss_test, _ = HCP_regression.evaluate_network(model, device, test_loader, epoch, logger,
@@ -117,13 +120,10 @@ def main(args):
 
                 # 'lr_sched': scheduler}
 
-        # if epoch_loss_train < min_test_loss:
-        #     min_test_loss = epoch_loss_train
-        #     checkpoint = {
-        #         'model': model.state_dict(),
-        #         'optimizer': optimizer.state_dict(),
-        #         'lr_sched': scheduler}
         early_stopping(epoch_loss_train,  epoch_loss_val)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        logger.info(f'Elapsed time for running the model: {elapsed_time:.4f} seconds')
         if early_stopping.early_stop:
             logger.info("We are at epoch: {}".format(epoch))
             break
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     parser.add_argument('--L2', default=1e-6, type=float, help='L2 regularization')
     parser.add_argument('--dropout', default=None, help='dropout rate')
     parser.add_argument('--seed', default=100, type=int, help='random seed')
-    parser.add_argument('--config', default='LR_HCPregression_PMAT', help='config file name')
+    parser.add_argument('--config', default='GGT_HCPregression_PMAT', help='config file name')
     parser.add_argument('--train_val_test', default=[0.7, 0.1, 0.2], help='train, val, test split')
     parser.add_argument('--dataset', default='dglHCP', help='dataset name')
     parser.add_argument('--sparse', default=30, type=int, help='sparsity for knn graph')

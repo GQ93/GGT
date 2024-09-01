@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import euclidean_distances
 from scipy import sparse as sp
 import dgl
 import torch.nn.functional as F
+
 LOGGING_DIC = {
     'version': 1.0,
     'disable_existing_loggers': False,
@@ -132,7 +133,7 @@ def seed_it(seed):
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = True
+    torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.enabled = True
     torch.manual_seed(seed)
 

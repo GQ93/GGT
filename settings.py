@@ -23,30 +23,30 @@ LOGGING_DIC = {
     'filters': {},
     'handlers': {
         'console_debug_handler': {
-            'level': 'DEBUG',  # 日志处理的级别限制
-            'class': 'logging.StreamHandler',  # 输出到终端
-            'formatter': 'simple'  # 日志格式
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         },
         'file_info_handler': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件,日志轮转
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'user.log',
-            'maxBytes': 1024 * 1024 * 10,  # 日志大小 10M
-            'backupCount': 10,  # 日志文件保存数量限制
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 10,
             'encoding': 'utf-8',
             'formatter': 'standard',
         },
         'file_debug_handler': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',  # 保存到文件
-            'filename': 'test.log',  # 日志存放的路径
-            'encoding': 'utf-8',  # 日志文件的编码
+            'class': 'logging.FileHandler',
+            'filename': 'test.log',
+            'encoding': 'utf-8',
             'formatter': 'test',
         },
     },
     'loggers': {
-        'logger1': {  # 导入时logging.getLogger时使用的app_name
-            'handlers': ['console_debug_handler'],  # 日志分配到哪个handlers中
+        'logger1': {
+            'handlers': ['console_debug_handler'],
             'level': 'DEBUG',
             'propagate': False,
         },
