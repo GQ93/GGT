@@ -3,6 +3,7 @@
 # @Author  : Gang Qu
 # @FileName: settings.py
 
+# setting for log
 LOGGING_DIC = {
     'version': 1.0,
     'disable_existing_loggers': False,
